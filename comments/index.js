@@ -54,7 +54,7 @@ app.post('/events', (req, res) =>{
 function _commentModeratedHandler(data){
   const { id, postId, status } = data
   const postComments = comments[postId];
-  const comment = postComments.find(comment => comment.id === id);
+  const comment = postComments.find(postComment => postComment.id === id);
   comment.status = status;
   console.log(postComments);
   axios.post('http://localhost:4005/events', {
