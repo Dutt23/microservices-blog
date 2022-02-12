@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-bus-depl
+# Deployment spec
+spec: 
+  replicas: 1
+  # Tells dpeloyment to manage pods with label app: posts.
+  # Can be changed to any label dihshss: posts
+  selector: 
+    matchLabels: 
+      app: event-bus
+  template:
+  # Create a pod with label
+    metadata:
+      labels:
+        app: event-bus 
+  # Pod spec
+    spec: 
+      containers:
+      - name: event-bus 
+        image: dutt23/event-bus
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: event-bus-srv
+spec: 
+  selector: 
+    app: event-bus
+ # Default is cluster ip service
+  type: ClusterIP
+  ports:
+  - name: event-bus
+    protocol: TCP
+    port: 4005
+    targetPort: 4005 

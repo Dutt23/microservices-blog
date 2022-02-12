@@ -6,7 +6,7 @@ const app = express();
 app.use(bodyParser.json());
 
 const services = [
-  { port: 4000, name: 'posts'},
+  { port: 4000, name: 'posts', ip: 'post-clusterip-srv'},
   { port: 4001, name: 'comment'},
   { port: 4002, name: 'query'},
   { port: 4003, name: 'moderation'}
@@ -21,7 +21,8 @@ app.post('/events', (req, res) =>{
   for(const service of services){
 
     try {
-      const result = axios.post(`http://localhost:${service.port}/events`, event);
+      const host = service.ip ??  'localhost'
+      const result = axios.post(`http://${host}:${service.port}/events`, event);
       promiseList.push(result);
     }
     catch(e){
