@@ -30,7 +30,7 @@ function _commentCreatedHandler(data){
   }
 
   const newStatus = _moderateComment(comment) ? 'APPROVED' : 'BLOCKED';
-  axios.post('http://localhost:4005/events', {
+  axios.post('http://event-bus-srv:4005/events', {
     type: 'CommentModerated',
       data :{...data,
       status: newStatus,
@@ -50,7 +50,7 @@ function _moderateComment(comment){
 
 app.listen(4003, () =>{
   console.log('Moderation service listening on port 4003');
-  axios.get('http://localhost:4005/events').then(res =>{
+  axios.get('http://event-bus-srv:4005/events').then(res =>{
     const events = res.data;
     for(const event of events){
       const { type, data } = event;

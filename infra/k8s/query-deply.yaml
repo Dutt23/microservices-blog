@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: query-depl
+# Deployment spec
+spec: 
+  replicas: 1
+  # Tells dpeloyment to manage pods with label app: posts.
+  # Can be changed to any label dihshss: posts
+  selector: 
+    matchLabels: 
+      app: query
+  template:
+  # Create a pod with label
+    metadata:
+      labels:
+        app: query
+  # Pod spec
+    spec: 
+      containers:
+      - name: query
+        image: dutt23/query
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: query-srv
+spec: 
+  selector: 
+    app: query
+ # Default is cluster ip service
+  type: ClusterIP
+  ports:
+  - name: query
+    protocol: TCP
+    port: 4002
+    targetPort: 4002

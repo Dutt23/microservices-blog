@@ -73,7 +73,7 @@ function _handleCommentUpdateEvent (data) {
 
 app.listen(4002, () =>{
   console.log("Query service listening on port 4003");
-  axios.get('http://localhost:4005/events').then(res =>{
+  axios.get('http://event-bus-srv:4005/events').then(res =>{
     const events = res.data;
     for(const event of events){
       const { type, data } = event;

@@ -27,7 +27,7 @@ app.post('/comments/:id/posts', (req, res) =>{
   postComments.push({ id, comment: content});
   comments[postId] = postComments;
 
-  axios.post('http://localhost:4005/events', {
+  axios.post('http://event-bus-srv:4005/events', {
     type: 'CommentCreated',
     data :{
       postId,
@@ -57,7 +57,7 @@ function _commentModeratedHandler(data){
   const comment = postComments.find(postComment => postComment.id === id);
   comment.status = status;
   console.log(postComments);
-  axios.post('http://localhost:4005/events', {
+  axios.post('http://event-bus-srv:4005/events', {
     type: 'CommentUpdated',
     data,
   })

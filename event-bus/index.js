@@ -7,29 +7,30 @@ app.use(bodyParser.json());
 
 const services = [
   { port: 4000, name: 'posts', ip: 'post-clusterip-srv'},
-  { port: 4001, name: 'comment'},
-  { port: 4002, name: 'query'},
-  { port: 4003, name: 'moderation'}
+  { port: 4001, name: 'comment', ip: 'comments-srv'},
+  { port: 4002, name: 'query', ip: 'query-srv'},
+  { port: 4003, name: 'moderation', ip: 'moderation-srv'}
 ]
 
 const events = [];
-app.post('/events', (req, res) =>{
+app.post('/events', async (req, res) =>{
   const event  = req.body;
   console.log(`EVENT + ${JSON.stringify(event)}`)
   const promiseList = [];
   events.push(event);
   for(const service of services){
-
-    try {
-      const host = service.ip ??  'localhost'
-      const result = axios.post(`http://${host}:${service.port}/events`, event);
-      promiseList.push(result);
-    }
-    catch(e){
-      console.log(`Could not emit event to ${service.name}`);
-      console.log(`Failed with error ${e}`);
-    }
+    const host = service.ip ??  'localhost'
+    const result = axios.post(`http://${host}:${service.port}/events`, event);
+    promiseList.push(result);
   }
+
+  try {
+    await Promise.all(promiseList)
+  }
+  catch(e){
+    console.log(`Failed with error ${e}`);
+  }
+
   console.log(`Sent events out to ${promiseList.length} listeners with body ${JSON.stringify(event)}`);
 
   res.send({ status: 'OK'})

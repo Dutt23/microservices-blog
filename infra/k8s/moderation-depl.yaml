@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moderation-depl
+# Deployment spec
+spec: 
+  replicas: 1
+  # Tells dpeloyment to manage pods with label app: posts.
+  # Can be changed to any label dihshss: posts
+  selector: 
+    matchLabels: 
+      app: moderation
+  template:
+  # Create a pod with label
+    metadata:
+      labels:
+        app: moderation
+  # Pod spec
+    spec: 
+      containers:
+      - name: moderation
+        image: dutt23/moderation
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: moderation-srv
+spec: 
+  selector: 
+    app: moderation
+ # Default is cluster ip service
+  type: ClusterIP
+  ports:
+  - name: moderation
+    protocol: TCP
+    port: 4003
+    targetPort: 4003
