@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-depl
+# Deployment spec
+spec: 
+  replicas: 1
+  # Tells dpeloyment to manage pods with label app: posts.
+  # Can be changed to any label dihshss: posts
+  selector: 
+    matchLabels: 
+      app: client
+  template:
+  # Create a pod with label
+    metadata:
+      labels:
+        app: client
+  # Pod spec
+    spec: 
+      containers:
+      - name: client
+        image: dutt23/client
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-srv
+spec: 
+  selector: 
+    app: client
+ # Default is cluster ip service
+  type: ClusterIP
+  ports:
+  - name: client
+    protocol: TCP
+    port: 3000
+    targetPort: 3000
